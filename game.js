@@ -7,18 +7,23 @@ $(".btn").click(function() {
   var userChosenColour = $(this).attr("id");
   userClickedPattern.push(userChosenColour);
 
-  // console.log(userClickedPattern);
+  // Play sound when the user clicks a button
+  playSound(userChosenColour);
 });
 
 function nextSequence() {
   var randomNumber = Math.floor(Math.random() * 4);
   var randomChosenColour = buttonColours[randomNumber];
-
   gamePattern.push(randomChosenColour);
 
-  // add animation and sound
+  // Add animation
   $("#" + randomChosenColour).fadeIn(100).fadeOut(100).fadeIn(100);
-  var audio = new Audio("sounds/" + randomChosenColour + ".mp3");
+  // Play sound
+  playSound(randomChosenColour);
+}
+
+// Create a new function called playSound() that takes a single input parameter called name
+function playSound(name) {
+  var audio = new Audio("sounds/" + name + ".mp3");
   audio.play();
 }
-nextSequence();
