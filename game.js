@@ -1,6 +1,6 @@
-var gamePattern = [];
 var buttonColours = ["red", "blue", "green", "yellow"];
 
+var gamePattern = [];
 var userClickedPattern = [];
 
 var started = false;
@@ -8,15 +8,41 @@ var level = 0;
 
 var title = $("#level-title");
 
+
 $(".btn").click(function() {
+  // Add color to userClickedPattern array when user clicks
   var userChosenColour = $(this).attr("id");
   userClickedPattern.push(userChosenColour);
 
-  // Play sound when the user clicks a button
+  // Play sound and animation when the user clicks a button
   playSound(userChosenColour);
-
   animatePress(userChosenColour);
+
+  //2. Call checkAnswer() after a user has clicked and chosen their answer, passing in the index of the last answer in the user's sequence.
+  var lastUserAnswerNumber = userClickedPattern.length - 1
+  checkAnswer(lastUserAnswerNumber);
 });
+
+function checkAnswer(currentLevel) {
+  console.log("gamePattern: " + gamePattern);
+  console.log("userClickedPattern: " + userClickedPattern);
+
+  //3. Check if the most recent user answer is the same as the game pattern.
+  if(userClickedPattern[currentLevel] === gamePattern[currentLevel]) {
+    console.log("success");
+
+    //4. Check that they have finished their sequence with another if statement.
+    if (userClickedPattern.length === gamePattern.length){
+
+      setTimeout(function() {
+        nextSequence();
+      }, 1000);
+
+    }
+  } else {
+    console.log("wrong");
+  }
+}
 
 $(document).keypress(function(e) {
   if(!started) {
@@ -28,8 +54,13 @@ $(document).keypress(function(e) {
 });
 
 function nextSequence() {
-  level++;
+  // Reset the userClickedPattern to an empty array ready for the next level
+  userClickedPattern = [];
 
+  level++;
+  title.text("Lavel " + level);
+
+  // Set to random value to gamePattern array
   var randomNumber = Math.floor(Math.random() * 4);
   var randomChosenColour = buttonColours[randomNumber];
   gamePattern.push(randomChosenColour);
